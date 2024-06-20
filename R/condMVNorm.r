@@ -18,7 +18,7 @@ if (check.sigma) {
 B <- sigma[dependent.ind, dependent.ind]
 C <- sigma[dependent.ind, given.ind, drop=FALSE]
 D <- sigma[given.ind, given.ind]
-CDinv <- C %*% solve(D)
+CDinv <- C %*% zapsmall(solve(D))
 cMu <- c(mean[dependent.ind] + CDinv %*% (X.given - mean[given.ind]))
 cVar <- B - CDinv %*% t(C)
 list(condMean=cMu, condVar=cVar)
