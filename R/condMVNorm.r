@@ -21,6 +21,11 @@ D <- sigma[given.ind, given.ind]
 CDinv <- C %*% zapsmall(solve(D))
 cMu <- c(mean[dependent.ind] + CDinv %*% (X.given - mean[given.ind]))
 cVar <- B - CDinv %*% t(C)
+if(any(diag(cVar) < 0)){
+	CDinv <- C %*% solve(D)
+	cMu <- c(mean[dependent.ind] + CDinv %*% (X.given - mean[given.ind]))
+	cVar <- B - CDinv %*% t(C)
+}
 if(!isTRUE(all.equal(cVar, t(cVar))) || any(diag(cVar) < 0)){
       browser()
 }	
