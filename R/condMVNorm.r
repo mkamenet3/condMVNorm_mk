@@ -30,9 +30,9 @@ if(any(diag(cVar) < 0)){
 	cMu <- c(mean[dependent.ind] + CDinv %*% (X.given - mean[given.ind]))
 	cVar <- B - CDinv %*% t(C)
 }
-#if(!isTRUE(all.equal(cVar, t(cVar))) || any(diag(cVar) < 0)){
-#      browser()
-#}	
+if(!isTRUE(all.equal(cVar, t(cVar))) || any(diag(cVar) < 0)){
+      browser()
+}	
 list(condMean=cMu, condVar=cVar)
 }
 
