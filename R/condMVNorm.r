@@ -18,18 +18,22 @@ if (check.sigma) {
 B <- sigma[dependent.ind, dependent.ind]
 C <- sigma[dependent.ind, given.ind, drop=FALSE]
 D <- sigma[given.ind, given.ind]
-CDinv <- C %*% zapsmall(solve(D))
+CDinv <- C %*% solve(D)
 cMu <- c(mean[dependent.ind] + CDinv %*% (X.given - mean[given.ind]))
 cVar <- B - CDinv %*% t(C)
+if(!is.symmetric.matrix(cVar)){
+	cVar = (cVar + t(cVar))/2
+	message("Machine error problem w cVar so averaging over cVar")
+}	
 if(any(diag(cVar) < 0)){
 	CDinv <- C %*% solve(D)
 	cMu <- c(mean[dependent.ind] + CDinv %*% (X.given - mean[given.ind]))
 	cVar <- B - CDinv %*% t(C)
 }
-if(!isTRUE(all.equal(cVar, t(cVar))) || any(diag(cVar) < 0)){
-      browser()
-}	
-list(condMean=cMu, condVar=zapsmall(cVar))
+#if(!isTRUE(all.equal(cVar, t(cVar))) || any(diag(cVar) < 0)){
+#      browser()
+#}	
+list(condMean=cMu, condVar=cVar)
 }
 
 # PDF of conditional multivariate-normal
